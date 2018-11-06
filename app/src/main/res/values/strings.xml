@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Joylin Pasteries</string>
+    <string name="RecipeImage">Recipe Image</string>
+    <string name="RecipeName">Recipe Name</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="exoInstruction">INSTRUCTION</string>
+</resources>
