@@ -5,20 +5,6 @@
         android:id="@+id/item_detail_container"
         android:background="#000000">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appBarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <include
-            layout="@layout/mytoolbar"
-            android:id="@+id/toolbar"/>
-
-
-    </android.support.design.widget.AppBarLayout>
 
     <com.codesgood.views.JustifiedTextView
         android:id="@+id/recipeInstructions"
@@ -31,7 +17,7 @@
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@id/appBarLayout"/>
+        />
     
     <com.google.android.exoplayer2.ui.SimpleExoPlayerView
         android:id="@+id/simpleExoPlayer"
@@ -39,6 +25,6 @@
         android:layout_height="match_parent">
 
     </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
-    </RelativeLayout>
+
 
 </FrameLayout>

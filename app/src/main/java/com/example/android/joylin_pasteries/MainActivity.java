@@ -1,8 +1,10 @@
 package com.example.android.joylin_pasteries;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -50,7 +52,13 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        } else {
+            recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        }
         recyclerView.setHasFixedSize(true);
 
         getRecipes();

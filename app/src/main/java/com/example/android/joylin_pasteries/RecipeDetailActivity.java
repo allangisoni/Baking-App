@@ -41,14 +41,16 @@ public class RecipeDetailActivity extends AppCompatActivity {
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 
             setContentView(R.layout.activity_recipe_detail);
-           StepsViewHolder.isTwoPane = false;
+            mTwoPane=false;
+          // StepsViewHolder.isTwoPane = false;
 
-           Toast.makeText(this, StepsViewHolder.isTwoPane.toString(), Toast.LENGTH_SHORT ).show();
+          // Toast.makeText(this, StepsViewHolder.isTwoPane.toString(), Toast.LENGTH_SHORT ).show();
         } else {
 
             setContentView(R.layout.recipe_detail_item_list);
-           StepsViewHolder.isTwoPane = true;
-            Toast.makeText(this, StepsViewHolder.isTwoPane.toString(), Toast.LENGTH_SHORT ).show();
+            mTwoPane = true ;
+           //StepsViewHolder.isTwoPane = true;
+           // Toast.makeText(this, StepsViewHolder.isTwoPane.toString(), Toast.LENGTH_SHORT ).show();
         }
         ButterKnife.bind(this);
 
@@ -78,12 +80,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
             Toast.makeText(this, "Data is not available", Toast.LENGTH_SHORT).show();
         }
 
-      /**  if(findViewById(R.id.item_detail_container) != null){
 
-            mTwoPane = true;
-        } **/
 
-        mTwoPane = StepsViewHolder.isTwoPane;
+
 
 
 

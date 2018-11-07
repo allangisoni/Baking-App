@@ -1,12 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            layout="@layout/mytoolbar"
+            android:id="@+id/toolbar"/>
+
+
+    </android.support.design.widget.AppBarLayout>
+
+<RelativeLayout
+    android:layout_below="@id/appBarLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
     android:orientation="vertical"
     android:layoutDirection="ltr"
     android:background="#CC000000">
+
+
+
 
     <LinearLayout
         android:id="@+id/player"
@@ -53,4 +73,5 @@
 
     </LinearLayout>
 
+</RelativeLayout>
 </RelativeLayout>

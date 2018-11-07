@@ -83,7 +83,6 @@ public class StepFragment extends Fragment {
         ButterKnife.bind(this, rootView );
 
 
-
         Bundle bundle = this.getArguments();
         step = bundle.getParcelable("recipeSteps");
 

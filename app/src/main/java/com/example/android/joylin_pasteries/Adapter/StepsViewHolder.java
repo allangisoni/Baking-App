@@ -30,9 +30,6 @@ public class StepsViewHolder extends RecyclerView.ViewHolder {
     TextView tvStepDescription;
 
 
-
-    //@BindView(R.id.tvStepVideoUrl) TextView tvStepVideoUrl;
-
     FragmentManager fragmentManager;
 
     public StepsViewHolder(final View itemView) {
@@ -63,13 +60,7 @@ public class StepsViewHolder extends RecyclerView.ViewHolder {
                         } else {
 
 
-                            Bundle bundle = new Bundle();
-                            bundle.putParcelable("recipeSteps", step);
-                            StepFragment stepFragment = new StepFragment();
-                            stepFragment.setArguments(bundle);
 
-                            fragmentManager = ((AppCompatActivity) itemView.getContext()).getSupportFragmentManager();
-                            fragmentManager.beginTransaction().replace(R.id.item_detail_container, stepFragment).commit();
 
                         }
 
