@@ -21,6 +21,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ *
+ * This class describes how the recipe details of each recipe will be displayed on the screen.
+ */
+
 public class RecipeDetailActivity extends AppCompatActivity {
 
     private boolean mTwoPane;
@@ -42,15 +47,12 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
             setContentView(R.layout.activity_recipe_detail);
             mTwoPane=false;
-          // StepsViewHolder.isTwoPane = false;
 
-          // Toast.makeText(this, StepsViewHolder.isTwoPane.toString(), Toast.LENGTH_SHORT ).show();
+
         } else {
 
             setContentView(R.layout.recipe_detail_item_list);
             mTwoPane = true ;
-           //StepsViewHolder.isTwoPane = true;
-           // Toast.makeText(this, StepsViewHolder.isTwoPane.toString(), Toast.LENGTH_SHORT ).show();
         }
         ButterKnife.bind(this);
 
@@ -58,42 +60,64 @@ public class RecipeDetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        recipeObjects = new ArrayList<Object>();
-        Intent intent = getIntent();
-
-        if(intent.hasExtra("recipeDetails")) {
-
-            recipe = intent.getParcelableExtra("recipeDetails");
-            recipeIngredient = recipe.getIngredients();
-            recipeSteps = recipe.getSteps();
-            recipeName = recipe.getName();
-
-            recipeObjects.addAll(recipeIngredient);
-            recipeObjects.addAll(recipeSteps);
-
-            setTitle(recipeName);
-
-
-        }
-        else {
-
-            Toast.makeText(this, "Data is not available", Toast.LENGTH_SHORT).show();
-        }
-
-
-
-
-
-
-
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new RecipesIngredientsandStepsAdapter(recipeObjects, mTwoPane, new RecipesIngredientsandStepsAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Step step) {
+
+        if(savedInstanceState != null){
+
+            if(savedInstanceState.getSerializable("bakingObjects") != null) {
+
+
+                recipeObjects = (ArrayList<Object>) savedInstanceState.getSerializable("bakingObjects");
+
+                recyclerView.setAdapter(new RecipesIngredientsandStepsAdapter(recipeObjects, mTwoPane, new RecipesIngredientsandStepsAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Step step) {
+
+                    }
+                }));
 
             }
-        }));
+
+        }else {
+
+            recipeObjects = new ArrayList<>();
+            Intent intent = getIntent();
+
+            if (intent.hasExtra("recipeDetails")) {
+
+                recipe = intent.getParcelableExtra("recipeDetails");
+                recipeIngredient = recipe.getIngredients();
+                recipeSteps = recipe.getSteps();
+                recipeName = recipe.getName();
+
+                recipeObjects.addAll(recipeIngredient);
+                recipeObjects.addAll(recipeSteps);
+
+                setTitle(recipeName);
+
+
+            } else {
+
+                Toast.makeText(this, "Data is not available", Toast.LENGTH_SHORT).show();
+            }
+
+
+            recyclerView.setAdapter(new RecipesIngredientsandStepsAdapter(recipeObjects, mTwoPane, new RecipesIngredientsandStepsAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(Step step) {
+
+                }
+            }));
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable("bakingObjects",recipeObjects );
+        super.onSaveInstanceState(outState);
+
+
 
     }
 }
