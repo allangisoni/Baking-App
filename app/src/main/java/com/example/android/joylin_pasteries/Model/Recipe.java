@@ -2,11 +2,18 @@ package com.example.android.joylin_pasteries.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Base64;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.orhanobut.logger.Logger;
 
+import java.io.IOException;
 import java.util.List;
+
+import okhttp3.logging.HttpLoggingInterceptor;
 
 public class Recipe implements Parcelable{
 
@@ -137,4 +144,28 @@ public class Recipe implements Parcelable{
         dest.writeInt(servings);
         dest.writeString(image);
     }
+
+    public static String toBase64String(Recipe recipe) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return Base64.encodeToString(mapper.writeValueAsBytes(recipe), 0);
+        } catch (JsonProcessingException e) {
+            Logger.e(e.getMessage());
+        }
+        return null;
+    }
+
+    public static Recipe fromBase64(String encoded) {
+        if (!"".equals(encoded)) {
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                return mapper.readValue(Base64.decode(encoded, 0), Recipe.class);
+            } catch (IOException e) {
+                Logger.e(e.getMessage());
+            }
+        }
+        return null;
+    }
+
+
 }

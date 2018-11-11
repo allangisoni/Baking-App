@@ -61,7 +61,7 @@ public class StepFragment extends Fragment {
     private boolean playWhenReady = true;
     TextView recipeInstruction;
     String stepDescription;
-    String videoUrl;
+    String videoUrl, myVideoUrl;
     Step step;
 
     public StepFragment(){
@@ -81,24 +81,56 @@ public class StepFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.step_fragment, container, false);
 
         ButterKnife.bind(this, rootView );
-
-
-        Bundle bundle = this.getArguments();
-        step = bundle.getParcelable("recipeSteps");
-
         recipeInstruction = (TextView) rootView.findViewById(R.id.recipeInstructions);
 
-        stepDescription = step.getDescription();
-
-        recipeInstruction.setText(stepDescription);
 
 
 
-        Log.d(TAG, stepDescription);
+        if(savedInstanceState != null){
 
-        componentListener = new ComponentListener();
 
-        initializeExoPlayer();
+
+                stepDescription = savedInstanceState.getString("myStep");
+
+                myVideoUrl = savedInstanceState.getString("videoUrl");
+
+
+                recipeInstruction.setText(stepDescription);
+
+                playWhenReady = savedInstanceState.getBoolean("playerState");
+
+                playbackPosition = savedInstanceState.getLong("playerPosition", 0);
+
+                componentListener = new ComponentListener();
+
+                initializeExoPlayer();
+
+
+
+        } else
+        {
+
+
+            Bundle bundle = this.getArguments();
+            step = bundle.getParcelable("recipeSteps");
+
+
+
+            stepDescription = step.getDescription();
+
+            recipeInstruction.setText(stepDescription);
+
+            myVideoUrl = step.getVideoURL();
+
+
+            Log.d(TAG, stepDescription);
+
+            componentListener = new ComponentListener();
+            initializeExoPlayer();
+        }
+
+
+
 
 
         return rootView;
@@ -111,8 +143,17 @@ public class StepFragment extends Fragment {
         super.onStart();
 
         if (Util.SDK_INT > 23) {
-            //initializePlayer();
+            initializeExoPlayer();
 
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+       // hideSystemUi();
+        if ((Util.SDK_INT <= 23 || simpleExoPlayer == null)) {
+            initializeExoPlayer();
         }
     }
 
@@ -148,8 +189,8 @@ public class StepFragment extends Fragment {
             simpleExoPlayer.setPlayWhenReady(playWhenReady);
             simpleExoPlayer.seekTo(currentWindow, playbackPosition);
 
-            Bundle bundle = this.getArguments();
-            videoUrl = step.getVideoURL();
+            //Bundle bundle = this.getArguments();
+            videoUrl = myVideoUrl;
             if (videoUrl.isEmpty()){
 
                 Toast.makeText(getContext(), "No Video Link", Toast.LENGTH_LONG).show();
@@ -318,6 +359,18 @@ public class StepFragment extends Fragment {
         public void onAudioDisabled(DecoderCounters counters) {
 
         }
+
     }
 
+    @Override
+    public void onSaveInstanceState( Bundle outState) {
+
+        outState.putString("myStep", recipeInstruction.getText().toString());
+        outState.putString("videoUrl", videoUrl);
+
+        outState.putBoolean("playerState" , playWhenReady);
+
+        outState.putLong("playerPosition", simpleExoPlayer.getCurrentPosition());
+        super.onSaveInstanceState(outState);
+    }
 }

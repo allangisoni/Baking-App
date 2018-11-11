@@ -3,9 +3,12 @@ package com.example.android.joylin_pasteries;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
+
+import com.example.android.joylin_pasteries.Model.Recipe;
 
 /**
  * Implementation of App Widget functionality.
@@ -17,25 +20,73 @@ public class BakingWidgetProvider extends AppWidgetProvider {
 
         //CharSequence widgetText = context.getString(R.string.appwidget_text);
         // Construct the RemoteViews object
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_widget_provider);
+       // RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_widget_provider);
         //views.setTextViewText(R.id.appwidget_text, widgetText);
 
-        Intent intent = new Intent(context, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+       // Intent intent = new Intent(context, MainActivity.class);
+        //PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-        views.setOnClickPendingIntent(R.id.widget_Baking_image, pendingIntent);
+        //views.setOnClickPendingIntent(R.id.widget_Baking_image, pendingIntent);
 
 
         // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, views);
+        //appWidgetManager.updateAppWidget(appWidgetId, views);
+
+
+        Recipe recipe = Prefs.loadRecipe(context);
+
+        if (recipe != null) {
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), 0);
+            // Construct the RemoteViews object
+            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.collection_widget);
+
+            views.setTextViewText(R.id.widgetTitleLabel, recipe.getName());
+            // Widgets allow click handlers to only launch pending intents
+
+
+            views.setOnClickPendingIntent(R.id.widgetTitleLabel, pendingIntent);
+
+            // Initialize the list view
+            Intent intent = new Intent(context, RecipeWidgetRemoteViewsService.class);
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+            // Bind the remote adapter
+            views.setRemoteAdapter(R.id.widgetListView, intent);
+            // Instruct the widget manager to update the widget
+            appWidgetManager.updateAppWidget(appWidgetId, views);
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widgetListView);
+        }
+
+
+
     }
+
+
+
+
+    public static void updateAppWidgets(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        for (int appWidgetId : appWidgetIds) {
+            updateAppWidget(context, appWidgetManager, appWidgetId);
+        }
+    }
+
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
-        for (int appWidgetId : appWidgetIds) {
+       for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
+
+
+       /** for (int appWidgetId : appWidgetIds) {
+            RemoteViews views = new RemoteViews(
+                    context.getPackageName(),
+                    R.layout.collection_widget
+            );
+            Intent intent = new Intent(context, RecipeWidgetRemoteViewsService.class);
+            views.setRemoteAdapter(R.id.widgetListView, intent);
+            appWidgetManager.updateAppWidget(appWidgetId, views);
+        } **/
     }
 
     @Override
