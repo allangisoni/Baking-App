@@ -18,19 +18,6 @@ public class BakingWidgetProvider extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
-        //CharSequence widgetText = context.getString(R.string.appwidget_text);
-        // Construct the RemoteViews object
-       // RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_widget_provider);
-        //views.setTextViewText(R.id.appwidget_text, widgetText);
-
-       // Intent intent = new Intent(context, MainActivity.class);
-        //PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-
-        //views.setOnClickPendingIntent(R.id.widget_Baking_image, pendingIntent);
-
-
-        // Instruct the widget manager to update the widget
-        //appWidgetManager.updateAppWidget(appWidgetId, views);
 
 
         Recipe recipe = Prefs.loadRecipe(context);
@@ -78,15 +65,6 @@ public class BakingWidgetProvider extends AppWidgetProvider {
         }
 
 
-       /** for (int appWidgetId : appWidgetIds) {
-            RemoteViews views = new RemoteViews(
-                    context.getPackageName(),
-                    R.layout.collection_widget
-            );
-            Intent intent = new Intent(context, RecipeWidgetRemoteViewsService.class);
-            views.setRemoteAdapter(R.id.widgetListView, intent);
-            appWidgetManager.updateAppWidget(appWidgetId, views);
-        } **/
     }
 
     @Override

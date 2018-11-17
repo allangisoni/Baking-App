@@ -44,6 +44,8 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.google.android.exoplayer2.video.VideoRendererEventListener;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -63,6 +65,8 @@ public class StepFragment extends Fragment {
     String stepDescription;
     String videoUrl, myVideoUrl;
     Step step;
+
+    String firstVideoUrl;
 
     public StepFragment(){
 
@@ -108,7 +112,8 @@ public class StepFragment extends Fragment {
 
 
         } else
-        {
+
+            {
 
 
             Bundle bundle = this.getArguments();
@@ -127,6 +132,10 @@ public class StepFragment extends Fragment {
 
             componentListener = new ComponentListener();
             initializeExoPlayer();
+
+
+
+
         }
 
 
@@ -174,7 +183,7 @@ public class StepFragment extends Fragment {
         }
     }
 
-    private void initializeExoPlayer() {
+    public void initializeExoPlayer() {
 
         if (simpleExoPlayer == null){
             TrackSelection.Factory adaptiveTrackSelectionFactory =
@@ -209,6 +218,44 @@ public class StepFragment extends Fragment {
 
 
     }
+
+    public  void AutoSelectStep(String selectedStep){
+
+        videoUrl =selectedStep;
+        if (simpleExoPlayer == null){
+            TrackSelection.Factory adaptiveTrackSelectionFactory =
+                    new AdaptiveTrackSelection.Factory(BANDWIDTH_METER);
+
+            simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(new DefaultRenderersFactory(getContext()),
+                    new DefaultTrackSelector(adaptiveTrackSelectionFactory), new DefaultLoadControl());
+            simpleExoPlayer.addListener(componentListener);
+            simpleExoPlayer.setVideoDebugListener(componentListener);
+            simpleExoPlayer.setAudioDebugListener(componentListener);
+            simpleExoPlayerView.setPlayer(simpleExoPlayer);
+            simpleExoPlayer.setPlayWhenReady(playWhenReady);
+            simpleExoPlayer.seekTo(currentWindow, playbackPosition);
+
+            //Bundle bundle = this.getArguments();
+            videoUrl = myVideoUrl;
+            if (videoUrl.isEmpty()){
+
+                Toast.makeText(getContext(), "No Video Link", Toast.LENGTH_LONG).show();
+                onStop();
+
+            }else {
+
+                String userAgent = Util.getUserAgent(getContext(), "Recipe Instruction");
+                MediaSource mediaSource = new ExtractorMediaSource(Uri.parse(videoUrl), new DefaultDataSourceFactory(
+                        getContext(), userAgent), new DefaultExtractorsFactory(), null, null);
+
+                simpleExoPlayer.prepare(mediaSource);
+                simpleExoPlayer.setPlayWhenReady(true);
+            }
+        }
+
+
+    }
+
 
     private void releaseExoPlayer() {
         if (simpleExoPlayer != null) {

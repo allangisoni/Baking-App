@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,6 +25,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static java.security.AccessController.getContext;
+
 /**
  *
  * This class describes how the recipe details of each recipe will be displayed on the screen.
@@ -36,6 +39,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     private Recipe recipe;
     private List<Ingredient> recipeIngredient;
     private  List<Step> recipeSteps;
+    private  String firstRecipeSteps;
     private ArrayList<Object> recipeObjects;
     private String recipeName;
     @BindView(R.id.toolbar)
@@ -46,17 +50,19 @@ public class RecipeDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
 
+
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 
             setContentView(R.layout.activity_recipe_detail);
             mTwoPane=false;
-
 
         } else {
 
             setContentView(R.layout.recipe_detail_item_list);
             mTwoPane = true ;
         }
+
+
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
@@ -94,10 +100,21 @@ public class RecipeDetailActivity extends AppCompatActivity {
                 recipeSteps = recipe.getSteps();
                 recipeName = recipe.getName();
 
+                firstRecipeSteps = recipeSteps.get(0).getVideoURL();
+
+
+
                 recipeObjects.addAll(recipeIngredient);
                 recipeObjects.addAll(recipeSteps);
 
                 setTitle(recipeName);
+
+              /**  StepFragment stepFragment = new StepFragment();
+                stepFragment.AutoSelectStep(firstRecipeSteps);
+                getSupportFragmentManager().beginTransaction().add(R.id.item_detail_container, stepFragment).commit();
+
+               **/
+
 
 
             } else {
@@ -114,6 +131,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
             }));
         }
     }
+
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {

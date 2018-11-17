@@ -27,16 +27,13 @@ public class RecipeStepActivity  extends AppCompatActivity{
 
         setContentView(R.layout.step_fragment);
 
-        //setSupportActionBar(toolbar);
-        //getSupportActionBar().setDisplayShowTitleEnabled(false);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         if(savedInstanceState == null){
 
             Bundle bundle = new Bundle();
             bundle.putParcelable("recipeSteps", getIntent().getParcelableExtra("recipeSteps"));
-           // Step step = getIntent().getParcelableExtra("recipeSteps");
-            //Toast.makeText(this, step.getDescription(), Toast.LENGTH_SHORT).show();
+
             StepFragment stepFragment = new StepFragment();
             stepFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().add(R.id.item_detail_container, stepFragment).commit();
